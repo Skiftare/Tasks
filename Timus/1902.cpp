@@ -7,14 +7,13 @@ const int inf = 1e9+7;
 signed main()
 {
 
-    int n,t,s;
+    int n,t,s, t0;
     cin>>n>>t>>s;
     int ans;
-    vector <int> time(n);
     for(int i = 0;i<n;i++){
-        cin>>time[i];
-        if(time[i] <s) ans = ((s + (time[i] + t)) / 2);
-        else ans = ((time[i] + (s + t)) / 2);
+        cin>>t0;
+        if(t0 <s) ans = ((s + (t0 + t)) / 2);
+        else ans = ((t0 + (s + t)) / 2);
         cout<<fixed<<setprecision(6)<<ans<<endl;
     }
 
