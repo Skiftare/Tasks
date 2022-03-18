@@ -2,15 +2,10 @@
 #define int long long
 const int inf = 1e9+7;
 using namespace std;
-pair <int,int> rotate(int x,int y){
-    //0 0 -> 0 3
-    // 0 1 ->1 3
-    // 0 2 -> 2 3
-    // 0 3 -> 3 3
-    //
+pair <int,int> rotate(int x,int y) {
     return make_pair(y,3-x);
-
 }
+
 signed main() {
     ios_base::sync_with_stdio(false);
     cin.tie(0), cout.tie(0);
@@ -48,15 +43,10 @@ signed main() {
             buffer.push_back(rotate(buf.first,buf.second));
         }
         std::sort(buffer.begin(), buffer.end());
-        for(int i = 0;i<buffer.size();i++){
-            q.push(buffer[i]);
-        }
-
-
+        for(int i = 0;i<buffer.size();i++) q.push(buffer[i]);
     }
+
     cout<<ans<<endl;
-
-
 
     return 0;
 }
