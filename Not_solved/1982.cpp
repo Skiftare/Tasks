@@ -4,8 +4,8 @@ const int inf = 1e9+7;
 using namespace std;
 
 signed main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0), cout.tie(0);
+    /*ios_base::sync_with_stdio(false);
+    cin.tie(0), cout.tie(0);*/
     int n,k;
     cin>>n>>k;
     int mas[n][n];
@@ -40,11 +40,10 @@ signed main() {
             if(!used[j] and v==-1){
                 v = j;
             }
-            else{
-                if(v!= -1){
-                    if(!used[j] and min_e[j] <min_e[v]){
-                        v = j;
-                    }
+
+            if(v!= -1) {
+                if (!used[j] and min_e[j] < min_e[v] and j!=v) {
+                    v = j;
                 }
             }
         }
