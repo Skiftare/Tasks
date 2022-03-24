@@ -29,7 +29,6 @@ signed main()
         a1=i;
         b1=0;
         if(p[i] == 0){
-            b1 = 1;
             a = i;
             break;
         }
