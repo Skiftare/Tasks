@@ -10,13 +10,10 @@ signed main()
 
     double n;
     cin>>n;
-    if(n==1){
-        cout<<0<<endl;
-        return 0;
-    }
+
     vector <int> ans;
     int k = 0;
-    while(n!= 1){
+    while(n > 1){
         ans.push_back((int)floor(n/2));
         n = n-ans[k];
         k++;
