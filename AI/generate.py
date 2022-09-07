@@ -2,7 +2,7 @@ from main import *
 
 
 try:
-    CG = ClassisGramm(1)
+    CG = ClassicGram(1)
     CG.restoring()
 except:
     from train import *
