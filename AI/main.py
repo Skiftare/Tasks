@@ -9,14 +9,10 @@ import re
 import pathlib
 import random
 
-class NGramsCounter:
-
+class NGrams:
     def __init__(self, order):
-        #print("init n-grams sucsess")
         if order < 1:
-            #print("NGramsCounter: order must be > 0, got: ", order)
             order = 1
-        #print(order)
         self.order = order
         self.root = {}
         self.ngrams = [0] * (order + 1)
@@ -37,11 +33,8 @@ class NGramsCounter:
 
 
     def add(self, lst):
-        print("starts adds")
-        print("NGramsCounter::add")
         for n in range(self.order):
             self.ngrams[n + 1] += max(len(lst) - n, 0)
-        print("one more sucess")
         for i in range(len(lst)):
             node = self.root
             for n, w in enumerate(lst[i: i + self.order]):
@@ -56,10 +49,8 @@ class NGramsCounter:
         print('\r', " " * 32, '\r')
         self.store()
 
-    # ---------------------------------------------------------------------------
     def counts(self, lst):
         if len(lst) == 0:
-             #print("NGramsCounter::counts len(lst) must be > 0, got: ", len(lst))
             return 0, 0, self.root
 
         if len(lst) > self.order:
@@ -69,7 +60,6 @@ class NGramsCounter:
         n_prv, n_cur = self.ngrams[1], self.ngrams[1]
 
         for i, w in enumerate(lst):
-            # print("still")
             if w in node:
                 n_prv = n_cur
                 n_cur = node[w][0]
@@ -82,7 +72,6 @@ class NGramsCounter:
 
         return n_cur, n_prv, node
 
-    # ---------------------------------------------------------------------------
     def prob(self, lst = [], cond=True):
 
         n_cur, n_prv, _ = self.counts(lst)
@@ -133,11 +122,10 @@ class NGramsCounter:
 class ClassisGramm:
 
     def __init__(self, order, counter=None):
-        self.order = order  # число n-грамм
-        self.counter = NGramsCounter(order) if not counter else counter
+        self.order = order  
+        self.counter = NGrams(order) if not counter else counter
 
     def add(self, text):
-        # print(len(text))
         self.counter.add(text)
 
 
@@ -148,55 +136,29 @@ class ClassisGramm:
         self.counter.restore()
 
     def perplexity(self, text):
-        #Не забыть
         order = self.order
         s, num, eps = 0, len(text) - order, 1e-10
         for i in range(order, len(text)):
             p = self.prob(text[i - order:i])
             if p < eps:
-                print("LanguageModel::perplexity: prob:", p, i, text[i - order:i])
                 return 0
             s += math.log(p)
 
         return math.exp(-s / num)
 
     def generate(self, prelst):
-        #next сновываясь на in(len(prelst, order))
         st = []
-
-        #for n in range(num):
-
-        lst = prelst[-self.order + 1:]  # order - 1
-            #print(*lst)
-        vocab = self.counter.branches()  # все слова
-            # print(len(vocab))
+        lst = prelst[-self.order + 1:]
+        vocab = self.counter.branches()
         probs = np.array([self.prob(list(list(lst) + [w])) for w, _ in vocab])
-            #print(sum(probs))
         if abs(sum(probs) - 1) > 1e-8:
             if 1 - sum(probs) < 1e-4 and sum(probs) <= 1.0:
                 probs /= probs.sum()
             else:
-                #print("Wrong context P(contex)=0 was created. sum(prob)!=1", sum(probs))
-                    #ran = np.random.choice(len(st)-1)
-                    #return st[ran]
                 i = random.randint(0,len(vocab)-1)
-
                 return vocab[i][0]
         i = np.random.choice(len(probs), 1, p=probs)[0]
         lst += vocab[i][0]
         st.append(str(vocab[i][0]))
-        #ran = np.random.choice(1,len(st))
         return str(vocab[i][0])
 
-'''
-CG = ClassisGramm(20)
-f = open('text.txt', 'r',encoding='utf-8')
-res = f.read()
-res = res.lower()
-need_to_replace = {'.', ',', '/','?', '|', '!', '@', '#', '№', '1','2','3','4','5','6','7','8','9','0','+',')','(', '–', ';',':' }
-for it in need_to_replace:
-    res = res.replace(it, '')
-lst = res.split()
-
-CG.add(lst)
-'''
