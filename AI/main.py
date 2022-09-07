@@ -9,6 +9,7 @@ import re
 import pathlib
 import random
 
+
 class NGrams:
     def __init__(self, order):
         if order < 1:
@@ -30,7 +31,6 @@ class NGrams:
             pickle.dump(self.root, file_pkl)
             pickle.dump(self.ngrams, file_pkl)
             pickle.dump(self.order, file_pkl)
-
 
     def add(self, lst):
         for n in range(self.order):
@@ -72,7 +72,7 @@ class NGrams:
 
         return n_cur, n_prv, node
 
-    def prob(self, lst = [], cond=True):
+    def prob(self, lst=[], cond=True):
 
         n_cur, n_prv, _ = self.counts(lst)
 
@@ -119,18 +119,17 @@ class NGrams:
             self.all_branches_rec(node[n][1], nxt, node[n][0], branches)
 
 
-class ClassisGramm:
+class ClassicGram:
 
     def __init__(self, order, counter=None):
-        self.order = order  
+        self.order = order
         self.counter = NGrams(order) if not counter else counter
 
     def add(self, text):
         self.counter.add(text)
 
-
     def prob(self, lst):
-       return self.counter.prob(lst)
+        return self.counter.prob(lst)
 
     def restoring(self):
         self.counter.restore()
@@ -155,10 +154,9 @@ class ClassisGramm:
             if 1 - sum(probs) < 1e-4 and sum(probs) <= 1.0:
                 probs /= probs.sum()
             else:
-                i = random.randint(0,len(vocab)-1)
+                i = random.randint(0, len(vocab) - 1)
                 return vocab[i][0]
         i = np.random.choice(len(probs), 1, p=probs)[0]
         lst += vocab[i][0]
         st.append(str(vocab[i][0]))
         return str(vocab[i][0])
-
