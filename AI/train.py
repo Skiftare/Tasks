@@ -4,7 +4,7 @@ def rep(s):
     return s
 
 
-print("please input path to the training text file ")
+print("please ABS input path to the training text file ")
 path = input()
 print("please input N for N-grams")
 N = int(input())
